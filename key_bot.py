@@ -4,8 +4,8 @@ import time
 import json
 from datetime import datetime, timedelta
 
-BOT_TOKEN = 'YOUR_BOT_TOKEN'
-ADMIN_ID = 123456789  # Replace with your Telegram ID
+BOT_TOKEN = '7945482985:AAFtERvKYVvFh1TaPV21yo7nTAoMk6vmy1g'
+ADMIN_ID = 6722166633  # Replace with your Telegram ID
 
 bot = telebot.TeleBot(BOT_TOKEN)
 keys = {}
