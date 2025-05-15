@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🔐 Admin - Key Generator</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script>
+    async function createKey() {
+      const minutes = document.getElementById("expiry").value;
+      if (!minutes || isNaN(minutes) || minutes <= 0) {
+        alert("⛔ Please enter a valid expiry time in minutes.");
+        return;
+      }
+
+      const now = new Date();
+      const expiry = new Date(now.getTime() + minutes * 60000);
+      const key = "KEY" + Math.floor(Date.now() / 1000);
+
+      // Save to JSON file (simulated here - actual saving must be done via backend)
+      const keys = await fetch("keys.json").then(r => r.json()).catch(() => ({}));
+      keys[key] = expiry.toISOString().slice(0, 19).replace("T", " ");
+
+      const blob = new Blob([JSON.stringify(keys, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "keys.json";
+      a.click();
+
+      document.getElementById("result").innerHTML = `<div class="mt-4 text-green-400">✅ Key Created: <strong>${key}</strong><br>⏳ Expires: ${keys[key]}</div>`;
+    }
+  </script>
+</head>
+<body class="bg-gray-900 text-white flex flex-col items-center justify-center h-screen px-4">
+  <div class="bg-gray-800 p-6 rounded-xl shadow-lg w-full max-w-md">
+    <h2 class="text-2xl font-bold mb-4 text-center">🔐 Admin Key Generator</h2>
+    <label for="expiry" class="block mb-2">Expiry Time (minutes):</label>
+    <input id="expiry" type="number" placeholder="e.g. 10" class="w-full p-2 rounded text-black mb-4">
+
+    <button onclick="createKey()" class="bg-blue-500 hover:bg-blue-600 w-full py-2 rounded text-white">
+      ➕ Generate New Key
+    </button>
+
+    <div id="result" class="mt-4 text-sm text-center"></div>
+  </div>
+</body>
+  </html>
+  
