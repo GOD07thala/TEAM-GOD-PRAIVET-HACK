@@ -1,0 +1,32 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-black text-white flex justify-center items-center h-screen">
+  <div class="bg-gray-800 p-8 rounded-xl shadow-xl w-96">
+    <h2 class="text-2xl font-bold mb-4">🔐 Secure Login</h2>
+    <input id="keyInput" type="text" placeholder="Enter Your Key" class="w-full p-2 rounded mb-4 text-black">
+    <button onclick="validateKey()" class="bg-blue-500 px-4 py-2 rounded text-white w-full">Login</button>
+    <p id="error" class="text-red-500 mt-2 hidden">Invalid or Expired Key</p>
+  </div>
+
+  <script>
+    async function validateKey() {
+      const key = document.getElementById('keyInput').value.trim();
+      const response = await fetch('keys.json');
+      const keys = await response.json();
+      const now = new Date();
+
+      if (keys[key] && new Date(keys[key]) > now) {
+        sessionStorage.setItem("loggedIn", "yes");
+        window.location.href = "prediction.html";
+      } else {
+        document.getElementById('error').classList.remove('hidden');
+      }
+    }
+  </script>
+</body>
+</html>
